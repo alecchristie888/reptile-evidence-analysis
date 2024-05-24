@@ -1,0 +1,215 @@
+"country","num.studies","gdp.per.cap","Conservation_Evidence","Continent","Number.of.Reptile.Species"
+"Antigua and Barbuda",3,14310.6862347854,"Yes","NAmerica",4
+"Argentina",6,10283.670625237,"Yes","Samerica",447
+"Australia",100,47956.3264264099,"Yes","Aus",1078
+"Austria",3,28990.8635158108,"Yes","Eur",16
+"Bahamas",1,29675.5358910641,"No","NAmerica",46
+"Belize",1,5519.3390084833,"Yes","NAmerica",144
+"Bermuda",1,5853.93258426966,"Yes","NAmerica",10
+"Brazil",11,11349.3628980475,"Yes","Samerica",814
+"Cameroon",1,1177.96860522717,"Yes","Africa",292
+"Canada",17,47240.481123567,"Yes","NAmerica",54
+"Cape Verde",3,3279.71305318017,"Yes","Africa",29
+"Cayman Islands",2,83507.5490946915,"Yes","NAmerica",198
+"China, P.R.",3,8016.73072541402,"Yes","Asia",490
+"Colombia",5,6433.28000724334,"Yes","Samerica",601
+"Costa Rica",16,9891.69634461429,"Yes","NAmerica",263
+"Dominican Republic",3,6549.13255595523,"Yes","NAmerica",124
+"Ecuador",6,999.935085101114,"Yes","Samerica",478
+"Egypt",2,1724.81695139362,"Yes","Africa",114
+"France",8,39464.7600673016,"Yes","Eur",189
+"Germany",1,9313.16941243118,"Yes","Eur",16
+"Greece",1,24821.9367451879,"Yes","Eur",75
+"India",8,1236.34436700927,"Yes","Asia",689
+"Indonesia",5,2290.47284303146,"Yes","Asia",755
+"Iran",1,8201.58167797698,"Yes","Asia",332
+"Italy",9,32647.5975009814,"Yes","Eur",60
+"Jamaica",1,5022.70019182535,"Yes","NAmerica",50
+"Japan",6,40189.5551377502,"Yes","Asia",98
+"Jordan",1,4152.49398098582,"Yes","Asia",115
+"Kenya",1,430.367259869666,"No","Africa",280
+"Madagascar",5,406.583587094907,"Yes","Africa",434
+"Malaysia",3,5245.09785680583,"Yes","Asia",486
+"Mauritania",1,1749.95423645373,"Yes","Africa",93
+"Mauritius",2,3854.06762160947,"Yes","Africa",32
+"Mexico",16,10399.5300279194,"Yes","NAmerica",957
+"Morocco",1,3288.50268554688,"No","Africa",109
+"Mozambique",1,681.49212857369,"Yes","Africa",225
+"Namibia",1,2352.66186421828,"Yes","Africa",275
+"Nepal",2,918.265464582739,"No","Asia",148
+"New Zealand",26,21751.5662012603,"Yes","Aus",73
+"Oman",1,6054.74388400155,"Yes","Asia",108
+"Pakistan",1,1421.83527830089,"No","Asia",208
+"Philippines",4,2277.68954565243,"Yes","Asia",350
+"Poland",1,8021.54789037388,"Yes","Eur",12
+"Portugal",1,22811.0564844365,"Yes","Eur",44
+"Puerto Rico",3,20862.487789219,"Yes","NAmerica",72
+"Qatar",1,79811.5977371757,"Yes","Asia",25
+"Russia",2,3487.56779345517,"Yes","Eur",89
+"Seychelles",5,11228.9303846066,"Yes","Africa",36
+"South Africa",8,6751.00722837701,"Yes","Africa",447
+"South Korea",2,30107.331940908,"Yes","Asia",12
+"Spain",19,23615.1276829854,"Yes","Eur",75
+"Suriname",4,2243.1148824746,"Yes","Samerica",158
+"Sweden",1,43437.0631164776,"Yes","Eur",7
+"Switzerland",1,17152.0948495991,"Yes","Eur",18
+"Thailand",2,6304.9044225587,"Yes","Asia",437
+"The Netherlands",2,54230.3129029852,"Yes","Eur",26
+"Tunisia",2,4236.75451623735,"Yes","Africa",74
+"Turkiye",2,7216.904607956,"Yes","Eur",150
+"United Arab Emirates",1,25463.4962885063,"Yes","Asia",74
+"United Kingdom",18,28268.0828506726,"Yes","Eur",5
+"United States",277,38675.7723631939,"Yes","NAmerica",530
+"Venezuela",5,13393.1438532273,"Yes","Samerica",409
+"Zambia",1,1307.90964916032,"Yes","Africa",187
+"Zimbabwe",1,716.949515038585,"Yes","Africa",190
+"Afghanistan",0,298.160299984837,"No","Asia",112
+"Albania",0,2559.08969409482,"No","Eur",41
+"Algeria",0,2247.15353979062,"No","Africa",107
+"American Samoa",0,11918.0085878432,"No","Aus",3
+"Andorra",0,24620.4436720754,"No","Eur",8
+"Angola",0,1709.45976077995,"No","Africa",280
+"Armenia",0,2358.24697536794,"No","Eur",53
+"Aruba",0,21735.2750125573,"No","NAmerica",13
+"Azerbaijan",0,3151.89635773323,"No","Asia",65
+"Bahrain",0,15487.9806714916,"No","Asia",11
+"Bangladesh",0,539.280828997494,"No","Asia",136
+"Barbados",0,10692.2861263268,"No","NAmerica",12
+"Belarus",0,4203.53784825027,"No","Eur",7
+"Belgium",0,22131.0976808137,"No","Eur",10
+"Benin",0,517.255363756093,"No","Africa",135
+"Bhutan",0,1338.12170313798,"No","Asia",65
+"Bolivia",0,1158.05998309414,"No","Samerica",315
+"Bosnia and Herzegovina",0,3618.24737630038,"No","Eur",1
+"Botswana",0,2849.41054840932,"No","Africa",159
+"Brunei Darussalam",0,18752.9834052167,"No","Asia",28
+"Bulgaria",0,4539.81425595591,"No","Eur",40
+"Burkina Faso",0,340.678930095885,"No","Africa",81
+"Burundi",0,163.102015302132,"No","Africa",66
+"Cambodia",0,565.911045903457,"No","Asia",192
+"Central African Republic",0,293.930675049819,"No","Africa",205
+"Chad",0,370.039445876836,"No","Africa",91
+"Chile",0,5499.50789960882,"No","Samerica",150
+"China, P.R.",0,2274.95175790347,"Yes","Asia",118
+"Comoros",0,1043.71276422716,"No","Africa",8
+"Congo, Dem. Rep.",0,309.283112519911,"No","Africa",317
+"Congo, Rep.",0,1239.11541547379,"No","Africa",352
+"Cote d'Ivoire",0,1052.3067124252,"No","Africa",153
+"Croatia",0,11281.2378647941,"No","Eur",41
+"Cuba",0,3558.80636247308,"No","NAmerica",175
+"Curacao",0,19083.5232725863,"Yes","NAmerica",0
+"Cyprus",0,16721.0504353841,"No","Eur",30
+"Czechia",0,14091.9887767867,"No","Eur",13
+"Denmark",0,31691.0602528488,"No","Eur",6
+"Djibouti",0,1363.50965418235,"No","Africa",36
+"Dominica",0,4634.13420709671,"No","NAmerica",19
+"El Salvador",0,1784.05223138947,"No","NAmerica",154
+"Equatorial Guinea",0,4107.60290485286,"No","Africa",74
+"Eritrea",0,365.861470323379,"No","Africa",97
+"Estonia",0,14020.1534034862,"No","Eur",6
+"Eswatini",0,1667.8809727591,"No","Africa",0
+"Eswatini",0,1667.8809727591,"No","Africa",102
+"Ethiopia",0,342.202524071566,"No","Africa",242
+"Faroe Islands",0,26484.7828322617,"No","Eur",0
+"Fiji",0,2319.99211933602,"No","Aus",43
+"Finland",0,23304.6208549809,"No","Eur",6
+"France",0,20852.8634688986,"No","Samerica",168
+"French Polynesia",0,13349.0513020851,"No","Aus",8
+"Gabon",0,4533.64896660249,"No","Africa",139
+"Gambia, The",0,448.525187289937,"No","Africa",93
+"Georgia",0,2554.77416753753,"No","Eur",154
+"Ghana",0,695.520541666735,"No","Africa",182
+"Grenada",0,4822.94082812929,"No","NAmerica",31
+"Guam",0,30454.658871036,"No","NAmerica",21
+"Guatemala",0,1706.51664286214,"No","Samerica",275
+"Guinea",0,606.15217639943,"No","Africa",612
+"Guinea-Bissau",0,347.119139540401,"No","Africa",69
+"Guyana",0,2136.16480852334,"No","Samerica",185
+"Haiti",0,572.470653423414,"No","NAmerica",123
+"Honduras",0,1127.83486913499,"No","Samerica",280
+"Hong Kong SAR, China",0,18284.2036050091,"Yes","Asia",75
+"Hungary",0,10451.1253570093,"No","Eur",17
+"Iceland",0,28008.3650397211,"No","Eur",1
+"Iraq",0,2528.78581105612,"No","Asia",116
+"Ireland",0,26400.5085387401,"No","Eur",18
+"Israel",0,22918.7950895012,"No","Asia",106
+"Kazakhstan",0,5841.18075532203,"No","Asia",53
+"Kiribati",0,945.912352056808,"No","Aus",3
+"Kosovo",0,3892.79678258283,"No","Eur",0
+"Kuwait",0,20385.9761985963,"No","Asia",36
+"Kyrgyz Republic",0,782.614223814981,"No","Asia",55
+"Lao PDR",0,958.848517375699,"No","Asia",181
+"Latvia",0,10933.071930421,"No","Eur",7
+"Lebanon",0,4995.84804779412,"No","Asia",57
+"Lesotho",0,475.182729470132,"No","Africa",20
+"Liberia",0,522.098559247681,"No","Africa",105
+"Libya",0,8222.54497797952,"No","Africa",67
+"Liechtenstein",0,78698.8053810066,"No","Eur",1
+"Lithuania",0,11434.6831228831,"No","Eur",8
+"Luxembourg",0,48283.1783005962,"No","Eur",5
+"Macao SAR, China",0,32368.9784742513,"No","Asia",2
+"Malawi",0,393.123674590624,"No","Africa",125
+"Maldives",0,4290.2738432915,"No","Asia",10
+"Mali",0,378.389778217411,"No","Africa",356
+"Malta",0,12519.8336229495,"No","Eur",10
+"Marshall Islands",0,2721.16007685302,"No","Aus",8
+"Micronesia, Fed. Sts.",0,2358.0471152375,"No","Aus",40
+"Moldova",0,2202.61196540914,"No","Eur",14
+"Monaco",0,102324.064883314,"No","Eur",3
+"Mongolia",0,1968.18901642433,"No","Asia",33
+"Montenegro",0,6152.83882196257,"No","Eur",22
+"Myanmar",0,338.497003326572,"Yes","Asia",337
+"Nauru",0,9157.3118648696,"No","Aus",10
+"New Caledonia",0,17952.402848802,"No","Aus",131
+"Nicaragua",0,1265.7508570011,"No","NAmerica",198
+"Niger",0,307.667376112928,"No","Africa",100
+"Nigeria",0,1097.68801831772,"No","Africa",203
+"North Macedonia",0,3711.81763689666,"No","Eur",35
+"Northern Mariana Islands",0,17787.3139362583,"No","Aus",2
+"Norway",0,37781.992672467,"No","Eur",9
+"Palau",0,11634.1682827566,"No","Aus",35
+"Panama",0,4912.10839961006,"No","Samerica",278
+"Papua New Guinea",0,1057.61027691689,"No","Aus",289
+"Paraguay",0,2381.25084018191,"No","Samerica",189
+"Peru",0,3363.53345791016,"No","Samerica",495
+"Romania",0,5951.63380065133,"No","Eur",24
+"Rwanda",0,317.573484334088,"No","Africa",81
+"Samoa",0,2236.70387359583,"No","Aus",22
+"San Marino",0,52278.8772516199,"No","Eur",1
+"Sao Tome and Principe",0,1295.48927960132,"No","Africa",3
+"Saudi Arabia",0,11877.4038803997,"No","Asia",107
+"Senegal",0,815.264331750626,"No","Africa",129
+"Serbia",0,5106.65606828753,"No","Eur",20
+"Sierra Leone",0,281.073144405462,"No","Africa",98
+"Singapore",0,22276.5522522446,"No","Asia",125
+"Slovak Republic",0,12017.8986809224,"No","Eur",14
+"Slovenia",0,19777.7605274154,"No","Eur",24
+"Solomon Islands",0,1100.45310435422,"No","Aus",99
+"Somalia",0,213.554449142354,"No","Africa",239
+"South Sudan",0,1378.47506203359,"No","Africa",21
+"Sri Lanka",0,1208.15634706317,"No","Asia",230
+"St. Kitts and Nevis",0,7759.22126659123,"Yes","NAmerica",1
+"St. Lucia",0,6385.41581539081,"Yes","NAmerica",3
+"St. Martin (French part)",0,20819.2361689442,"No","NAmerica",0
+"St. Vincent and the Grenadines",0,3141.72730277158,"No","NAmerica",0
+"Sudan",0,718.438282921201,"No","Africa",194
+"Syrian Arab Republic",0,2532.80621775078,"No","Asia",101
+"Tajikistan",0,553.182553364982,"No","Asia",49
+"Tanzania",0,578.168059430804,"No","Africa",359
+"Timor-Leste",0,1043.50758855339,"No","Africa",29
+"Timor-Leste",0,1043.50758855339,"No","Africa",0
+"Togo",0,400.1370770387,"No","Africa",159
+"Tonga",0,2163.67836749555,"No","Africa",26
+"Trinidad and Tobago",0,7316.41689302576,"No","NAmerica",118
+"Turkmenistan",0,3210.50840300402,"No","Asia",89
+"Turks and Caicos Islands",0,24204.4402149467,"No","NAmerica",6
+"Tuvalu",0,2652.15930924341,"No","Aus",6
+"Uganda",0,345.001903101939,"No","Africa",175
+"Ukraine",0,2200.48136562771,"No","Eur",23
+"United Kingdom",0,21331.2392223535,"Yes","NAmerica",20
+"Uruguay",0,6143.80625591744,"No","Samerica",80
+"Uzbekistan",0,1233.18395268067,"No","Asia",61
+"Vanuatu",0,1847.19362564903,"No","Aus",38
+"Vietnam",0,1279.99775719239,"No","Asia",479
+"Virgin Islands (U.S.)",0,37339.5855842506,"Yes","NAmerica",36
+"Yemen, Rep.",0,910.920494977128,"No","Asia",112
