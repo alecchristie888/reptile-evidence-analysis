@@ -13,7 +13,7 @@ library(emmeans)
 library(car)
 library(DHARMa)
 library(glmmTMB)
-
+library(MuMIn)
 library(ape)
 library(cluster)
 library(RColorBrewer)
@@ -21,95 +21,89 @@ library(ggplot2)
 
 
 setwd("~/reptile-evidence-analysis")
-MasterTax <- fread("~/Reptile-taxa-data.csv")
+MasterTax <- fread("Reptile-taxa-data-revised.csv")
 
 ## Taxonomy GLM
+str(MasterTax)
 unique(MasterTax$redlistCategory)
-MasterTax$redlistCategory <- factor(MasterTax$redlistCategory, levels=c("Data Deficient", "Not Assessed", "Least Concern", "Near Threatened", "Vulnerable", "Endangered", "Critically Endangered"))
+MasterTax$redlistCategory <- factor(MasterTax$redlistCategory, levels=c( "Least Concern","Data Deficient", "Not Evaluated", "Near Threatened","Vulnerable", "Endangered", "Critically Endangered"))
 unique(MasterTax$redlistCategory)
 unique(MasterTax$orderName)
 MasterTax$orderName <- factor(MasterTax$orderName, levels=c("Squamata","Testudines","Crocodilia"))
 MasterTax$page_views.x <- as.integer(MasterTax$page_views.x)
+MasterTax$endemic <- factor(MasterTax$`Insular/endemic (yes or no)`,levels=c("No","Yes"))
+MasterTax$venom  <- factor(MasterTax$`Venomous (yes or no)`,levels=c("No","Yes","Unknown"))
+MasterTax$bodymass <- MasterTax$`Maximum body mass (g)`
+
+MasterTax <- na.omit(MasterTax)
+
+cor.test(MasterTax$ED,MasterTax$page_views.x)
+cor.test(MasterTax$ED,MasterTax$`Maximum body mass (g)`)
+cor.test(MasterTax$page_views.x,MasterTax$`Maximum body mass (g)`)
 
 ### taxonomic model if poisson - results show tax model cannot use poisson distribution
-Taxmodel1 <- glm(num.studies ~ redlistCategory + ED + page_views.x +orderName, data=MasterTax, family=poisson)
+Taxmodel1 <- glm(num.studies ~ redlistCategory + ED + page_views.x +orderName + endemic + venom + bodymass, data=MasterTax, family=poisson)
 testDispersion(Taxmodel1)
 simulationOutput <- simulateResiduals(fittedModel = Taxmodel1, plot = F)
 residuals(simulationOutput)
 plot(simulationOutput)
 
-### ZERO-INFLATED POISSON REGRESSION suggests that the excess zeros are generated from a separate process from the count values
+### ZERO-INFLATED POISSON REGRESSION suggests that the excess zeros are generated from a separate process from the count values - not sure if this is best option for this data
+
 ### Tests for the quasipoisson distribution for Tax model - not symmetrical
-Taxmodelqp <- glm(num.studies ~ redlistCategory + ED + page_views.x +orderName, data=MasterTax, family=quasipoisson)
+Taxmodelqp <- glm(num.studies ~ redlistCategory + ED + page_views.x +orderName + endemic + venom + bodymass, data=MasterTax, family=quasipoisson)
 dev_residuals <- residuals(Taxmodelqp, type = "deviance")
 # Plot deviance residuals against predicted values
 plot(fitted(Taxmodelqp), dev_residuals, main = "Deviance Residuals vs. Fitted Values")
 
-MasterTax$page_views.x_scaled <- scale(MasterTax$page_views.x)
-MasterTax$ED_scaled <- scale(MasterTax$ED)
+### poisson - results show tax model cannot use poisson distribution
+scale_0.5SD <- function(x){
+  (x - mean(x)) / (2*sd(x))
+}
 
-#model selection
-Taxmodelnb <- glmmTMB(num.studies ~ redlistCategory + ED_scaled + page_views.x_scaled +orderName, family=nbinom2, ziformula = ~0, data=MasterTax)
+MasterTax$page_views.x_scaled <- scale_0.5SD(MasterTax$page_views.x)
+MasterTax$ED_scaled <- scale_0.5SD(MasterTax$ED)
+MasterTax$bodymass_scaled <- scale_0.5SD(MasterTax$bodymass)
 
-Taxmodelnb3 <- glmmTMB(num.studies ~ redlistCategory + ED_scaled + page_views.x_scaled, family=nbinom2, ziformula = ~0 ,data=MasterTax)
-Taxmodelnb4 <- glmmTMB(num.studies ~ redlistCategory + ED_scaled + orderName, family=nbinom2, ziformula = ~0 ,data=MasterTax)
-Taxmodelnb5 <- glmmTMB(num.studies ~ redlistCategory + page_views.x_scaled + orderName, family=nbinom2, ziformula = ~0 ,data=MasterTax)
-Taxmodelnb6 <- glmmTMB(num.studies ~ ED_scaled + page_views.x_scaled +orderName, family=nbinom2, ziformula = ~0 ,data=MasterTax)
+Taxmodelnb <- glmmTMB(num.studies ~ redlistCategory + ED_scaled + page_views.x_scaled +orderName  + endemic + venom + bodymass_scaled, family=nbinom2, ziformula = ~0, data=MasterTax)
 
-Taxmodelnb7 <- glmmTMB(num.studies ~ ED_scaled + page_views.x_scaled, family=nbinom2, ziformula = ~0 ,data=MasterTax)
-Taxmodelnb8 <- glmmTMB(num.studies ~ ED_scaled + orderName, family=nbinom2, ziformula = ~0 ,data=MasterTax)
-Taxmodelnb9 <- glmmTMB(num.studies ~ ED_scaled + redlistCategory, family=nbinom2, ziformula = ~0 ,data=MasterTax)
-Taxmodelnb10 <- glmmTMB(num.studies ~ page_views.x_scaled + orderName, family=nbinom2, ziformula = ~0 ,data=MasterTax)
-Taxmodelnb11 <- glmmTMB(num.studies ~ page_views.x_scaled + redlistCategory, family=nbinom2, ziformula = ~0 ,data=MasterTax)
-Taxmodelnb12 <- glmmTMB(num.studies ~ redlistCategory + orderName, family=nbinom2, ziformula = ~0 ,data=MasterTax)
+options(na.action = "na.fail") #Must run this code once to use dredge
+all_models_tax <- dredge(Taxmodelnb)
+#write.csv(data.frame(all_models_tax),"all_models_tax_new.csv")
 
-Taxmodelnb13 <- glmmTMB(num.studies ~ page_views.x_scaled, family=nbinom2, ziformula = ~0 ,data=MasterTax)
-Taxmodelnb14 <- glmmTMB(num.studies ~ ED_scaled , family=nbinom2, ziformula = ~0 ,data=MasterTax)
-Taxmodelnb15 <- glmmTMB(num.studies ~ orderName, family=nbinom2, ziformula = ~0 ,data=MasterTax)
-Taxmodelnb16 <- glmmTMB(num.studies ~ redlistCategory, family=nbinom2, ziformula = ~0 ,data=MasterTax)
+all_models_tax
+nrow(all_models_tax)
 
-anova(Taxmodelnb, Taxmodelnb3) 
-anova(Taxmodelnb, Taxmodelnb4) 
-anova(Taxmodelnb, Taxmodelnb5)##nb5 and original model are close in AIC but within 2, so keep original model
-anova(Taxmodelnb, Taxmodelnb6) 
-anova(Taxmodelnb, Taxmodelnb7) 
-anova(Taxmodelnb, Taxmodelnb8) 
-anova(Taxmodelnb, Taxmodelnb9) 
-anova(Taxmodelnb, Taxmodelnb10) 
-anova(Taxmodelnb, Taxmodelnb11) 
-anova(Taxmodelnb, Taxmodelnb12) 
-anova(Taxmodelnb, Taxmodelnb13) 
-anova(Taxmodelnb, Taxmodelnb14) 
-anova(Taxmodelnb, Taxmodelnb15) 
-anova(Taxmodelnb, Taxmodelnb16) 
+#several models with deltaAICc <2
+m.top.models.2aic <- get.models(all_models_tax, subset = delta <2)
+length(m.top.models.2aic)
 
+all_models_tax_avg <- summary(model.avg(m.top.models.2aic))
 
-simulationOutput <- simulateResiduals(fittedModel = Taxmodelnb)
-plot(simulationOutput) ## deviation not significant
-testZeroInflation(simulationOutput)
+all_models_tax_avg
+sw(all_models_tax_avg)
+confint(all_models_tax_avg,full=TRUE)
 
-## Taxmodelnb is the best model that passes DHARMa
-#look at model summary and analysis of deviance test
-summary(Taxmodelnb)
-Anova(Taxmodelnb, type="II")
+#averaged model summary
+#write.csv(summary(all_models_tax_avg)[9],"glm_tax_summaryupdate_new.csv")
+#write.csv(sw(all_models_tax_avg),"glm_tax_relimp_new.csv")
+#write.csv(confint(all_models_tax_avg,full=TRUE),"glm_tax_confint_new.csv")
 
-emmeans(Taxmodelnb, pairwise ~ redlistCategory, type="response")
-write.csv(emmeans(Taxmodelnb, pairwise ~ redlistCategory, type="response")$contrasts,"emmeanstaxredlist.csv")
-emmeans(Taxmodelnb, pairwise ~ orderName, type="response")
-write.csv(emmeans(Taxmodelnb, pairwise ~ orderName, type="response")$contrasts,"emmeanstaxorder.csv")
-mean(MasterTax[orderName=="Squamata",num.studies])
-mean(MasterTax[orderName=="Testudines",num.studies])
+#top model summaries
+#write.csv(summary(get.models(all_models_tax, subset = delta <2)[[1]])[6][[1]][1],"glm_tax_summaryupdatetop3_1_new.csv")
+#write.csv(summary(get.models(all_models_tax, subset = delta <2)[[2]])[6][[1]][1],"glm_tax_summaryupdatetop3_2_new.csv")
+#write.csv(summary(get.models(all_models_tax, subset = delta <2)[[3]])[6][[1]][1],"glm_tax_summaryupdatetop3_3_new.csv")
 
-#test assumption of neg. binom model
-m3 <- glm(num.studies ~ redlistCategory + ED_scaled + page_views.x_scaled +orderName, family = "poisson", data = MasterTax)
-pchisq(2 * (logLik(Taxmodelnb) - logLik(m3)), df = 1, lower.tail = FALSE)
-2 * (logLik(Taxmodelnb) - logLik(m3))
+#write.csv(confint(get.models(all_models_tax, subset = delta <2)[[1]],full=TRUE),"glm_tax_confint_top3_1new.csv")
+#write.csv(confint(get.models(all_models_tax, subset = delta <2)[[2]],full=TRUE),"glm_tax_confint_top3_2new.csv")
+#write.csv(confint(get.models(all_models_tax, subset = delta <2)[[3]],full=TRUE),"glm_tax_confint_top3_3new.csv")
 
+#top 100 studied species
+#write.csv(MasterTax[rev(order(page_views.x)),][1:100],"top100species_new.csv")
 
-#most viewed species
-MasterTax[rev(order(page_views.x))][1:100]
-#most studied species
-MasterTax[num.studies>0][rev(order(num.studies))]
+#all species with at least one study
+#write.csv(MasterTax[num.studies>0,][rev(order(num.studies))],"allstudiedspecies_new.csv")
+
 
 ####################################################
 ## Tree of families
@@ -133,8 +127,6 @@ rt <- "(((Chelidae, (Pelomedusidae, Podocnemididae)), ((Carettochelyidae, Triony
 ((Prosymnidae, Psammophiidae), ((Atractaspididae), 
 (Pseudaspididae, (Pseudoxyrhophiidae, Elapidae, Lamprophiidae, Cyclocoridae))))))))))))))))))))), 
 ((Alligatoridae, (Crocodylidae, Gavialidae))));"
-
-
 
 
 #place holder structure of the tree

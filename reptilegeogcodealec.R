@@ -4,7 +4,6 @@ library(DHARMa)
 library(glmmTMB)
 library(car)
 library(emmeans)
-
 library(ggmap)
 library(mapdata)
 library(viridis)
@@ -20,62 +19,59 @@ library(raster)
 library(devtools)
 library(data.table)
 library(RColorBrewer)
+library(MuMIn)
 
 setwd("~/reptile-evidence-analysis")
-rep.dat <- fread("~/Reptile-geog-data.csv")
+rep.dat <- fread("Reptile-geog-data-revised.csv")
 
 #########Geography GLM
+rep.dat$Continent <- factor(rep.dat$continent, levels=c("Asia", "North America", "Oceania", "Europe", "Africa", "South America"))
 
-### geographic model Poisson - results show geog model cannot use poisson distribution
-Geogmodel1 <- glm(num.studies ~ gdp.per.cap + Number.of.Reptile.Species + Continent, family="poisson", data=rep.dat)
+### geographic model if poisson - results show geog model cannot use poisson distribution
+Geogmodel1 <- glm(num.studies ~ gdp.per.cap + Number.of.Species*prop.thr + Continent, family="poisson", data=rep.dat)
 testDispersion(Geogmodel1)
 simulationOutput <- simulateResiduals(fittedModel = Geogmodel1, plot = F)
 residuals(simulationOutput)
 plot(simulationOutput)
 testZeroInflation(simulationOutput)
 
-### ZERO-INFLATED POISSON REGRESSION suggests that the excess zeros are generated from a separate process from the count values
+### ZERO-INFLATED POISSON REGRESSION suggests that the excess zeros are generated from a separate process from the count values - not sure if this is best option for this data
 ### Tests for the quasipoisson distribution for geog model - not symmetrical
-Geogmodelqp <- glm(num.studies ~ gdp.per.cap + Number.of.Reptile.Species + Continent, family="quasipoisson", data=rep.dat)
+Geogmodelqp <- glm(num.studies ~ gdp.per.cap + Number.of.Species*prop.thr  + Continent, family="quasipoisson", data=rep.dat)
 dev_residuals <- residuals(Geogmodelqp, type = "deviance")
 # Plot deviance residuals against predicted values
 plot(fitted(Geogmodelqp), dev_residuals, main = "Deviance Residuals vs. Fitted Values")
 #patterns in residuals with some large outliers.
 
-### Using glmmTMB negative binomial for geog - passes Dharma tests
-Geogmodelnb <- glmmTMB(num.studies ~ gdp.per.cap + Number.of.Reptile.Species + Continent, family=nbinom2, ziformula = ~0 , data=rep.dat)
+### poisson - results show tax model cannot use poisson distribution
+scale_0.5SD <- function(x){
+  (x - mean(x)) / (2*sd(x))
+}
 
-Geogmodelnb2 <- glmmTMB(num.studies ~ gdp.per.cap + Number.of.Reptile.Species, family=nbinom2, ziformula = ~0 , data=rep.dat)
-Geogmodelnb3 <- glmmTMB(num.studies ~ gdp.per.cap + Continent, family=nbinom2, ziformula = ~0, data=rep.dat)
-Geogmodelnb4 <- glmmTMB(num.studies ~ Number.of.Reptile.Species + Continent, family=nbinom2, ziformula = ~0, data=rep.dat)
-Geogmodelnb5 <- glmmTMB(num.studies ~ gdp.per.cap, family=nbinom2, ziformula = ~0, data=rep.dat)
-Geogmodelnb6 <- glmmTMB(num.studies ~ Number.of.Reptile.Species, family=nbinom2, ziformula = ~0, data=rep.dat)
-Geogmodelnb7 <- glmmTMB(num.studies ~ Continent, family=nbinom2, ziformula = ~0, data=rep.dat)
+rep.dat$gdp.per.cap_scaled <- scale_0.5SD(rep.dat$gdp.per.cap)
+rep.dat$Number.of.Species_scaled <- scale_0.5SD(rep.dat$Number.of.Species)
+rep.dat$prop.thr_scaled <- scale_0.5SD(rep.dat$prop.thr)
 
-anova(Geogmodelnb, Geogmodelnb2) #Geogmodelnb2 without continent has lower AIC by >2 and not significant difference with log likelihood test
-anova(Geogmodelnb, Geogmodelnb3) 
-anova(Geogmodelnb, Geogmodelnb4) 
-anova(Geogmodelnb, Geogmodelnb5)
-anova(Geogmodelnb, Geogmodelnb6) 
-anova(Geogmodelnb, Geogmodelnb7) 
-## Best model is one that does not include continent - which is Geogmodelnb2
+cor.test(rep.dat$gdp.per.cap_scaled, rep.dat$prop.thr_scaled)
+cor.test(rep.dat$Number.of.Species_scaled, rep.dat$prop.thr_scaled)
+cor.test(rep.dat$Number.of.Species_scaled, rep.dat$gdp.per.cap_scaled)
 
-#loglikelihood ratio test to check assumptions of neg.binomial - passes - sig. better than poisson
-m3 <- glm(num.studies ~ gdp.per.cap + Continent, family = "poisson", data = rep.dat)
-pchisq(2 * (logLik(Geogmodelnb2) - logLik(m3)), df = 1, lower.tail = FALSE)
-2 * (logLik(Geogmodelnb2) - logLik(m3))
+Geogmodelnb <- glmmTMB(num.studies ~ gdp.per.cap_scaled + Number.of.Species_scaled*prop.thr_scaled + Continent, family=nbinom2, ziformula = ~0, data=rep.dat)
 
-#Dharma plots look fine
-simulationOutput <- simulateResiduals(fittedModel = Geogmodelnb2)
-plot(simulationOutput)
-testZeroInflation(simulationOutput)
+options(na.action = "na.fail") #Must run this code once to use dredge
+all_models_geog <- dredge(Geogmodelnb)
+m.top.models.2aic <- get.models(all_models_geog, subset = delta <2)
+length(m.top.models.2aic)
 
-#ANOVA analysis of deviance tests and model summary results
-Anova(Geogmodelnb2, type="II")
-summary(Geogmodelnb2)
+#Geogmodelnb2 without continent has lower AIC by >2 and not significant difference with log likelihood test
+Geogmodelnb2 <- glmmTMB(num.studies ~ gdp.per.cap_scaled + Number.of.Species_scaled+prop.thr_scaled, family=nbinom2, ziformula = ~0, data=rep.dat)
 
-#number of studies by country
-rep.dat[rev(order(num.studies)),list(country,num.studies)]
+summary(get.models(all_models_geog, subset = delta <2)[[1]])[6][[1]][1]
+confint(get.models(all_models_geog, subset = delta <2)[[1]],full=TRUE)
+
+#write.csv(summary(get.models(all_models_geog, subset = delta <2)[[1]])[6][[1]][1],"geog-modelsummary-update.csv",row.names=FALSE)
+#write.csv(confint(get.models(all_models_geog, subset = delta <2)[[1]],full=TRUE),"geog-modelsummary-updateconfint.csv",row.names=FALSE)
+
 
 ################################################## map plotting
 
@@ -97,9 +93,9 @@ WorldData$country <- WorldData$region
 setdiff(rep.dat$country,WorldData$country)
 
 sort(unique(WorldData$country))
+
 WorldData[country=="Antigua",country:="Antigua and Barbuda"]
-WorldData[country=="China",country:="China, P.R."]
-WorldData[country=="Netherlands",country:="The Netherlands"]
+WorldData[country=="Bahamas",country:="Bahamas, The"]
 WorldData[country=="Turkey",country:="Turkiye"]
 WorldData[country=="UK",country:="United Kingdom"]
 WorldData[country=="USA",country:="United States"]
@@ -107,6 +103,7 @@ WorldData[country=="Brunei",country:="Brunei Darussalam"]
 WorldData[country=="Democratic Republic of the Congo",country:="Congo, Dem. Rep."]
 WorldData[country=="Republic of Congo",country:="Congo, Rep."]
 WorldData[country=="Ivory Coast",country:="Cote d'Ivoire"]
+WorldData[country=="Egypt",country:="Egypt, Arab Rep."]
 WorldData[country=="Czech Republic",country:="Czechia"]
 WorldData[country=="Swaziland",country:="Eswatini"]
 WorldData[country=="Gambia",country:="Gambia, The"]
@@ -122,17 +119,26 @@ WorldData[country=="Syria",country:="Syrian Arab Republic"]
 WorldData[country=="Trinidad",country:="Trinidad and Tobago"]
 WorldData[country=="Virgin Islands",country:="Virgin Islands (U.S.)"]
 WorldData[country=="Yemen",country:="Yemen, Rep."]
+WorldData[country=="Vietnam",country:="Viet Nam"]
+WorldData[country=="Cape Verde",country:="Cabo Verde"]
+WorldData[country=="Iran",country:="Iran, Islamic Rep."]
+WorldData[country=="Russia",country:="Russian Federation"]
+WorldData[country=="Sint Maarten",country:="Sint Maarten (Dutch part)"]
+WorldData[country=="Venezuela",country:="Venezuela, RB"]
+WorldData[country=="South Korea",country:="Korea, Rep."]
 
-rep.dat2 <- rep.dat
-rep.dat2[country=="Macao SAR, China",country:="China, P.R."]
-rep.dat2[country=="Hong Kong SAR, China",country:="China, P.R."]
+rep.dat1 <- rep.dat
 
-rep.dat2 <- data.table(rep.dat2 %>% 
+#combine these for the purposes of plotting
+rep.dat1[country=="Hong Kong SAR, China",country:="China"]
+rep.dat1[country=="Macao SAR, China",country:="China"]
+
+rep.dat2 <- data.table(rep.dat1 %>% 
   group_by(country) %>%
   summarise(num.studies=sum(num.studies)))
 
-setdiff(rep.dat2$country,WorldData$country)
-setdiff(WorldData$country,rep.dat2$country)
+#setdiff(rep.dat2$country,WorldData$country)
+#setdiff(WorldData$country,rep.dat2$country)
 
 map.df <- merge(rep.dat2, WorldData, by="country")
 str(map.df)
