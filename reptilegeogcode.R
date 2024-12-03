@@ -72,6 +72,10 @@ confint(get.models(all_models_geog, subset = delta <2)[[1]],full=TRUE)
 #write.csv(summary(get.models(all_models_geog, subset = delta <2)[[1]])[6][[1]][1],"geog-modelsummary-update.csv",row.names=FALSE)
 #write.csv(confint(get.models(all_models_geog, subset = delta <2)[[1]],full=TRUE),"geog-modelsummary-updateconfint.csv",row.names=FALSE)
 
+#test assumption of neg.binom.
+# m3 <- glm(num.studies ~ gdp.per.cap_scaled + Number.of.Species_scaled + prop.thr_scaled, family = "poisson", data = rep.dat)
+# pchisq(2 * (logLik(Geogmodelnb2) - logLik(m3)), df = 1, lower.tail = FALSE)
+# 2 * (logLik(Geogmodelnb2) - logLik(m3))
 
 ################################################## map plotting
 

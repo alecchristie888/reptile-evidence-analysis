@@ -104,6 +104,10 @@ confint(all_models_tax_avg,full=TRUE)
 #all species with at least one study
 #write.csv(MasterTax[num.studies>0,][rev(order(num.studies))],"allstudiedspecies_new.csv")
 
+#test assumption of neg.binom.
+# m3 <- glm(num.studies ~ redlistCategory + ED_scaled + page_views.x_scaled +orderName  + endemic + venom + bodymass_scaled, family = "poisson", data = MasterTax)
+# pchisq(2 * (logLik(Taxmodelnb) - logLik(m3)), df = 1, lower.tail = FALSE)
+# 2 * (logLik(Taxmodelnb) - logLik(m3))
 
 ####################################################
 ## Tree of families
